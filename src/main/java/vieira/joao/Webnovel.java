@@ -10,14 +10,18 @@ public class Webnovel {
     private String currentChapterURL;
     private int totalChapters;
     private int currentChapter;
+    private String website;
+    private String dir;
 
     public Webnovel() {
-        this.title = null;
-        this.author = null;
-        this.firstChapterURL = null;
-        this.currentChapterURL = null;
+        this.title = "A";
+        this.author = "A";
+        this.firstChapterURL = "A";
+        this.currentChapterURL = "A";
         this.totalChapters = 0;
         this.currentChapter = 0;
+        this.website = "A";
+        this.dir = "A";
     }
 
     public static Webnovel buildWebnovel(String json) {
