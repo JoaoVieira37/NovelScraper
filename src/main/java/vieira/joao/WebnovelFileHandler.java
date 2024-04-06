@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class WebnovelFileHandler {
 
@@ -40,8 +41,16 @@ public class WebnovelFileHandler {
 
         Path location = Paths.get(path);
 
+        // TODO: Need to check if the novel to write already exists and replace it
+
         ArrayList<Webnovel> oldData = WebnovelFileHandler.readSaveFile(path);
-        oldData.add(wn);
+        Webnovel oldNovel = oldData.stream().filter(webnovel -> webnovel.getTitle().equals(wn.getTitle())).findFirst().orElse(null);
+        if (oldNovel == null) {
+            oldData.add(wn);
+        } else {
+            oldNovel.setCurrentChapterURL(wn.getCurrentChapterURL());
+            oldNovel.setCurrentChapter(wn.getCurrentChapter());
+        }
 
         try {
 

@@ -1,9 +1,21 @@
 package vieira.joao;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String os = System.getProperty("os.name").toLowerCase();
         String geckoDriverPath;
@@ -13,16 +25,25 @@ public class App {
         // Set the geckodriver property
         System.setProperty("webdriver.gecko.driver", geckoDriverPath);
 
-
+        FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("--headless");
 
         // Start the driver
-        //WebDriver driver = new FirefoxDriver();
+        WebDriver driver = new FirefoxDriver(options);
 
         //Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
 
-        //driver.get("https://novelbin.novel-online.org/novel/versatile-mage/chapter-1");
+//        driver.get("https://novelbin.novel-online.org/novel/versatile-mage/chapter-1");
+//
+//        String source = driver.getPageSource();
+//        Document page = Jsoup.parse(source);
+//
+//        Element element = page.getElementById("next_chap");
+//
+//        System.out.println(page.getElementById("next_chap").attr("href"));
+//
+//        Files.write(Paths.get("test.txt"), new String(page.toString()).getBytes());
 
-        //String source = driver.getPageSource();
 
         //Document doc = Jsoup.parse(source);
         //Elements paragraphs = doc.getElementsByTag("p");
@@ -47,8 +68,19 @@ public class App {
 //            throw new RuntimeException(e);
 //        }
 
-        Webnovel wn = new Webnovel();
+        Webnovel wn = new Webnovel("Versatile Mage", "Chaos",
+                "https://novelbin.novel-online.org/novel/versatile-mage/chapter-1",
+                "https://novelbin.novel-online.org/novel/versatile-mage/chapter-1",
+                10,
+                1,
+                "novelbin",
+                "Versatile Mage");
 
+        WebnovelFileHandler.writeToSaveFile("saveFile.json", wn);
+
+        Scraper.scrape(wn, driver);
+
+        WebnovelFileHandler.writeToSaveFile("saveFile.json", wn);
         //WebnovelFileHandler.writeToSaveFile("saveFile.json", wn);
 
         ArrayList<Webnovel> webnovels = WebnovelFileHandler.readSaveFile("saveFile.json");
